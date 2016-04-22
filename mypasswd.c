@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);}
 
 	if(!getConnectMysql(&conn)){								//mysqlconn
-                printf("Error while getting MySQL connection.\n%s.\Exit\n",mysql_error(conn));
+                printf("Error while getting MySQL connection.\n%s.\nExit\n",mysql_error(conn));
                 exit(EXIT_FAILURE);}
 
 	if(!do_MySQL_SELECT_PASSWORD(conn, &passwd, cuser, cuid)){
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	//reset connnection
 	mysql_close(conn);
 	if(!getConnectMysql(&conn)){								//mysqlconn
-	                printf("Error while getting MySQL connection.\n%s.\Exit\n",mysql_error(conn));
+	                printf("Error while getting MySQL connection.\n%s.\nExit\n",mysql_error(conn));
 	                exit(EXIT_FAILURE);}
 
 	//update
