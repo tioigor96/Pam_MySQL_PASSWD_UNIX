@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
     }
 
     if (!getConnectMysql(&conn)) {                                //mysqlconn
-        printf("Error while getting MySQL connection.\n%s.\Exit\n", mysql_error(conn));
+        printf("Error while getting MySQL connection.\n%s.\nExit\n", mysql_error(conn));
         exit(EXIT_FAILURE);
     }
 
@@ -196,7 +196,7 @@ bool do_MySQL_UPDATE_PASSWORD(MYSQL *sock, char **passwdhash, char *user, int cu
  * @param Password to check.
  */
 bool chk_passwd(char *password, char *password2check) {
-    return (strcmp(password, crypt(password2check, password)) == 0) ? true : false;
+    return (strcmp(password, crypt(password2check, password)) == 0);
 }
 
 
