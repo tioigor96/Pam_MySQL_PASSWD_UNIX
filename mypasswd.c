@@ -1,5 +1,5 @@
 /**
- *	Filippo Callegari - april 2016
+ *	Filippo Callegari - 29 october 2016
  *	This suorce is under GNU v3 license.
  *
  *	Compile this code with this command:
@@ -98,13 +98,6 @@ int main(int argc, char **argv) {
     //create new hashed password
     passwd = make_hashed_pass(tmpstr1);
 
-    //reset connnection
-    mysql_close(conn);
-    if (!getConnectMysql(&conn)) {                                //mysqlconn
-        printf("Error while getting MySQL connection.\n%s.\Exit\n", mysql_error(conn));
-        exit(EXIT_FAILURE);
-    }
-
     //update
     if (!do_MySQL_UPDATE_PASSWORD(conn, &passwd, cuser, cuid)) {
         printf("Error while UPDATE PASSWORD for MySQL.\nERROR:%s", passwd);
@@ -151,7 +144,7 @@ bool getConnectMysql(MYSQL **sock) {
  * @param Current uid
  */
 bool do_MySQL_SELECT_PASSWORD(MYSQL *sock, char **password, char *user, int cuid) {
-    //MYSQL_RES *result;
+    MYSQL_RES *result;
     MYSQL_ROW row;
     char query[MAX_QUERY_LEN];
 
@@ -162,15 +155,15 @@ bool do_MySQL_SELECT_PASSWORD(MYSQL *sock, char **password, char *user, int cuid
         return false;
     }
 
-    MYSQL_RES *result = mysql_use_result(sock);
+    result = mysql_use_result(sock);
     row = mysql_fetch_row(result);
 
-    *password = row[0];
+    *password = (char *) malloc(strlen(row[0]) + 1);
+    memcpy(*password, row[0], strlen(row[0]) + 1);
 
-    //ci sarebbe da fare la free, ma non la mettiamo causa perdita corrispondenza memoria
+    mysql_free_result(result);
+
     return true;
-
-
 }
 
 /**
@@ -235,7 +228,6 @@ bool chk_new_passwd(char *old_passwd) {
             }
         }
     }
-
     return false;
 }
 
